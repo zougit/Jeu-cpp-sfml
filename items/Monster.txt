@@ -1,0 +1,22 @@
+12|Goblin|3|1|4
+13|Green Slime|6|1|6
+14|Bigeyes|6|2|8
+15|Skeleton|3|8|12
+16|Crawler|12|2|16
+17|Wolf|10|6|18
+18|Goblin guard|12|8|22
+19|Black Widow|8|10|26
+20|Gigas Worm|10|8|26
+21|Zombie|20|5|30
+22|Ghoul|18|8|34
+23|Cobra|12|15|46
+24|Lizard|15|18|60
+25|Ogre|40|20|80
+26|Pirate|20|10|60
+27|Sahagin|18|10|50
+28|Buccanner|30|14|70
+29|Ghast|30|20|120
+30|Scorpion|20|22|80
+31|Shadow|50|10|100
+32|Shark|80|22|160
+99|Sananator|100|40|1000
