@@ -130,43 +130,58 @@ void Player::leveling()
 
 void Player::battle(Monster m, RenderWindow &window)
 {
-window.clear();
+    window.clear();
 
-        Texture bg;
-        if (!bg.loadFromFile("bg-battle.png"))
-            cout << "Loading failure" << endl;
+    Texture bg;
+    if (!bg.loadFromFile("bg-battle.png"))
+        cout << "Loading failure" << endl;
 
-        Sprite bgSprite(bg);
-        bgSprite.setTextureRect(IntRect(259, 147, 259, 147));
-        bgSprite.scale(4.7, 6);
-        Vector2f pos = bgSprite.getScale();
+    Sprite bgSprite(bg);
+    bgSprite.setTextureRect(IntRect(259, 147, 259, 147));
+    bgSprite.scale(4.7, 6);
+    Vector2f pos = bgSprite.getScale();
 
-        Texture textBox;
-        if (!textBox.loadFromFile("textBox.png"))
-            cout << "Loading failure" << endl;
+    Texture textBox;
+    if (!textBox.loadFromFile("textBox.png"))
+        cout << "Loading failure" << endl;
 
-        Sprite textBoxSprite(textBox);
-        textBoxSprite.setTextureRect(IntRect(0, 0, 252, 44));
-        Sprite textBox1 = textBoxSprite;
-        textBox1.setPosition(0, (147 * pos.y) - 10);
-        textBox1.scale(4.8, 2);
-        Vector2f posText = textBox1.getPosition();
-        Vector2f textScale = textBox1.getScale();
+    Sprite textBoxSprite(textBox);
+    textBoxSprite.setTextureRect(IntRect(0, 0, 252, 44));
+    Sprite textBox1 = textBoxSprite;
+    textBox1.setPosition(0, (147 * pos.y) - 10);
+    textBox1.scale(4.8, 2);
+    Vector2f posText = textBox1.getPosition();
+    Vector2f textScale = textBox1.getScale();
 
-        sf::Font font;
-        if (!font.loadFromFile("arial_narrow_7.ttf"))
-        {
-            cout << "error";
-        }
+    sf::Font font;
+    if (!font.loadFromFile("arial_narrow_7.ttf"))
+    {
+        cout << "error";
+    }
 
-        Text text("monster appeared", font, 24);
-        text.setFillColor(Color::Black);
-        text.setPosition(50, posText.y + 30);
+    Text text("monster appeared", font, 24);
+    text.setFillColor(Color::Black);
+    text.setPosition(50, posText.y + 30);
 
-        window.draw(bgSprite);
-        window.draw(textBox1);
-        window.draw(text);
-        window.display();
+    Text text1("1) attaquer", font, 24);
+    text1.setFillColor(Color::Black);
+    text1.setPosition(198 * textScale.x, posText.y + 10);
+
+    Text text2("2) se soigner", font, 24);
+    text2.setFillColor(Color::Black);
+    text2.setPosition(198 * textScale.x, posText.y + 30);
+
+    Text text3("3) fuir", font, 24);
+    text3.setFillColor(Color::Black);
+    text3.setPosition(198 * textScale.x, posText.y + 50);
+
+    Text select[] = {text1, text2, text3};
+    int selection = 0;
+
+    textBoxSprite.setTextureRect(IntRect(0, 270, 252, 44));
+    Sprite textBox2 = textBoxSprite;
+    textBox2.setPosition(198 * textScale.x, (147 * pos.y) - 10);
+    textBox2.scale(1, 2);
 
     srand(time(0));
     InitList l;
@@ -174,57 +189,77 @@ window.clear();
     int chance = 0;
     m.displayMonster();
     Event event;
+
+    window.draw(text);
+
     while (!escape)
     {
-        
-        window.pollEvent(event);
-        if (event.type == Event::KeyPressed)
+        window.draw(bgSprite);
+        window.draw(textBox1);
+        window.display();
+
+        if (Keyboard::isKeyPressed(Keyboard::Enter))
+            window.pollEvent(event);
+
+        if (turn && m.getHp() > 0 && _currentHp > 0)
         {
-            if (turn && m.getHp() > 0 && _currentHp > 0)
+            // cout << "\nPlayer turn" << endl;
+            // cout << "Actions : " << endl
+            //     << "1) attaquer" << endl
+            //     << "2) se soigner" << endl
+            //     << "3) fuir" << endl;
+            // cout << "choisissez une action : " << endl;
+            // cin >> choix;
+
+            // Text text("choose an action", font, 24);
+            // text.setFillColor(Color::Black);
+            // text.setPosition(50, posText.y + 30);
+
+            text.setString("choose an action");
+
+            window.draw(text);
+            window.draw(text1);
+            window.draw(text2);
+            window.draw(text3);
+            window.display();
+
+            Keyboard::Key choice = event.key.code;
+
+            switch (choice)
             {
-                // cout << "\nPlayer turn" << endl;
-                // cout << "Actions : " << endl
-                //     << "1) attaquer" << endl
-                //     << "2) se soigner" << endl
-                //     << "3) fuir" << endl;
-                // cout << "choisissez une action : " << endl;
-                // cin >> choix;
-                textBoxSprite.setTextureRect(IntRect(0, 270, 252, 44));
-                Sprite textBox2 = textBoxSprite;
-                textBox2.setPosition(198 * textScale.x, (147 * pos.y) - 10);
-                textBox2.scale(1, 2);
-
-                Text text("choose an action", font, 24);
-                text.setFillColor(Color::Black);
-                text.setPosition(50, posText.y + 30);
-
-                Text text1("1) attaquer", font, 24);
-                text1.setFillColor(Color::Black);
-                text1.setPosition(198 * textScale.x, posText.y + 10);
-
-                Text text2("2) se soigner", font, 24);
-                text2.setFillColor(Color::Black);
-                text2.setPosition(198 * textScale.x, posText.y + 30);
-
-                Text text3("3) fuir", font, 24);
-                text3.setFillColor(Color::Black);
-                text3.setPosition(198 * textScale.x, posText.y + 50);
-
-                window.draw(textBox2);
-                window.draw(text);
-                window.draw(text1);
-                window.draw(text2);
-                window.draw(text3);
-                window.display();
-
-                Keyboard::Key choice = event.key.code;
-                switch (choice)
+            case Keyboard::Down:
+                if (selection < 2)
                 {
-                case Keyboard::Num1:
+                    selection += 1;
+                    select[selection].setOutlineColor(Color::Red);
+                    select[selection - 1].setOutlineColor(Color::Transparent);
+                }
+                break;
+            case Keyboard::Up:
+                if (selection > 0)
+                {
+                    selection -= 1;
+                    select[selection].setOutlineColor(Color::Red);
+                    select[selection + 1].setOutlineColor(Color::Transparent);
+                }
+                break;
+            default:
+                continue;
+            }
+            window.draw(text1);
+            window.draw(text2);
+            window.draw(text3);
+            window.display();
+
+            if (Keyboard::isKeyPressed(Keyboard::Enter))
+            {
+                switch (selection)
+                {
+                case 0:
                     m.recieveDamage(_weapon.getDamage());
                     // cout << "pv Monstre : " << m.getHp() << endl;
                     break;
-                case Keyboard::Num2:
+                case 1:
                     if (_currentHp + l.getHeals()[0].getHealing() > _hpMax)
                     {
                         _currentHp = _hpMax;
@@ -235,7 +270,7 @@ window.clear();
                     }
                     // cout << "player soigné : " << _currentHp << '/' << _hpMax << endl;
                     break;
-                case Keyboard::Num3:
+                case 2:
                     chance = 1 + (rand() % 100);
                     if (chance < 30)
                     {
@@ -252,35 +287,37 @@ window.clear();
                     // cout << "ceci n'est pas une action"<< endl;
                     continue;
                 }
-                turn = false;
-            }
 
-            if (!turn && m.getHp() > 0 && _currentHp > 0)
-            {
-                // cout << "\nMonster turn" << endl;
-                _currentHp -= (m.getDamage() - _armor.getResistance());
-                // cout << "pv Player : " << _currentHp << "/" << _hpMax << endl;
-                window.draw(textBox1);
-                window.draw(text);
-                window.display();
-                turn = true;
-            }
-
-            if (m.getHp() <= 0)
-            {
-                // cout << _name << " win!"<<endl;
-                _currentExp += m.getExp();
-                // cout << "exp: " << _currentExp << "/" << _expMax << endl << endl;
-                leveling();
-                m.monsterDie();
-                return;
-            }
-            if (_currentHp <= 0)
-            {
-                // cout <<"Monster win!" << endl << endl;
-                return;
+                // turn = false;
             }
         }
+
+        if (!turn && m.getHp() > 0 && _currentHp > 0)
+        {
+            // cout << "\nMonster turn" << endl;
+            _currentHp -= (m.getDamage() - _armor.getResistance());
+            // cout << "pv Player : " << _currentHp << "/" << _hpMax << endl;
+            window.draw(textBox1);
+            window.draw(text);
+            window.display();
+            turn = true;
+        }
+
+        if (m.getHp() <= 0)
+        {
+            // cout << _name << " win!"<<endl;
+            _currentExp += m.getExp();
+            // cout << "exp: " << _currentExp << "/" << _expMax << endl << endl;
+            leveling();
+            m.monsterDie();
+            return;
+        }
+        if (_currentHp <= 0)
+        {
+            // cout <<"Monster win!" << endl << endl;
+            return;
+        }
     }
+
     window.display();
 }
